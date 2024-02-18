@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Clockwise Counter</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  </head>
+  <body>
+    <div id="app">
+      <table>
+        <tr v-for="(row, rowIndex) in values">
+          <td v-for="(value, colIndex) in row">
+            <button @click="moveValue(rowIndex, colIndex)">{{ value }}</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          values: [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+          ],
+        },
+        methods: {
+          moveValue(rowIndex, colIndex) {
+            // Nếu click vào ô số 5, di chuyển các số xung quanh theo chiều kim đồng hồ
+            if (this.values[rowIndex][colIndex] === 5) {
+              this.moveClockwise(rowIndex, colIndex);
+            }
+          },
+
+          // this.values[0][0] = this.values[0][1];
+          // this.values[0][1] = this.values[0][2];
+          // this.values[0][2] = this.values[1][2];
+          // this.values[1][0] = this.values[0][0];
+          // this.values[1][1] = this.values[1][1];
+          // this.values[1][2] = this.values[2][2];
+          // this.values[2][0] = this.values[1][0];
+          // this.values[2][1] = this.values[2][0];
+          // this.values[2][2] = this.values[2][1];
+
+          moveClockwise(row, col) {
+            // Lưu giữ giá trị của ô số 5 vào biến tạm
+            const temp = this.values[row][col];
+            //Lưu giá trị cuối cùng khi chạy hết 1 vòng để đặt lại
+            const valueLast = this.values[0][2];
+            console.log(valueLast, "aaa");
+            // Di chuyển giá trị theo chiều kim đồng hồ
+
+            this.$set(this.values[0], 2, this.values[0][1]);
+            this.$set(this.values[0], 1, this.values[0][0]);
+            this.$set(this.values[0], 0, this.values[1][0]);
+            this.$set(this.values[1], 0, this.values[2][0]);
+            this.$set(this.values[2], 0, this.values[2][1]);
+            this.$set(this.values[2], 1, this.values[2][2]);
+            this.$set(this.values[2], 2, this.values[1][2]);
+            this.$set(this.values[1], 2, valueLast);
+
+            // Đặt lại giá trị của ô số 5
+            this.$set(this.values[1], col, temp);
+
+            console.log(this.values);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
